@@ -17,5 +17,7 @@ urlpatterns = [
     path('validate-ticket/', views.validate_ticket, name='validate_ticket'),
     path('verify-ticket/', views.verify_ticket, name='verify_ticket'),
     path('organiser/scan-ticket/', views.ticket_scanner, name='ticket_scanner'),
+    path('test-db/', views.test_db_connection, name='test_db'),
+
 
 ]
