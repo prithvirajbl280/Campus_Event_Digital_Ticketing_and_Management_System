@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     background-color: #fefefe;
@@ -164,6 +163,7 @@ button.btn-primary:hover {
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 40px;
 }
 
 .btn-logout:hover {
@@ -521,7 +521,9 @@ form[role="search"] button.btn {
 
 .qr-scanner-button {
   display: inline-block;
-  padding: 10px 22px;
+  width: 500px; /* fixed width */
+  text-align: center;
+  padding: 10px 32px;
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
@@ -538,6 +540,9 @@ form[role="search"] button.btn {
   color: #ffffff;
   text-decoration: none;
 }
+
+
+
 
 
 .qr-scanner {
@@ -574,11 +579,11 @@ form[role="search"] button.btn {
 }
 
 .qr-scanner__ticket-info--valid {
-  background-color: #007bff; /* Blue */
+  background-color: #007bff; /* Blue for valid tickets */
 }
 
 .qr-scanner__ticket-info--verified {
-  background-color: #dc3545; /* Red */
+  background-color: #dc3545; /* Red for already verified */
 }
 
 .qr-scanner__verify-btn {
@@ -595,16 +600,8 @@ form[role="search"] button.btn {
   transition: background-color 0.3s ease;
   text-align: center;
   user-select: none;
-  width: 80%;
-  
+  max-width: 200px;
 }
-
-#verify-btn-container {
-  display: flex;
-  justify-content: center;
-}
-
-
 
 .qr-scanner__verify-btn:hover {
   background-color: #1e7e34;
