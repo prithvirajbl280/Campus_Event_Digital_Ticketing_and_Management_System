@@ -291,3 +291,17 @@ def verify_ticket(request):
 @user_passes_test(is_organiser, login_url='no_permission')
 def ticket_scanner(request):
     return render(request, 'ticketing/scan_ticket.html')
+
+
+
+
+# In views.py
+def test_db_connection(request):
+    from django.db import connection
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT version();")
+            db_version = cursor.fetchone()
+        return HttpResponse(f"✅ Database connected: {db_version[0]}")
+    except Exception as e:
+        return HttpResponse(f"❌ Database connection failed: {str(e)}")
