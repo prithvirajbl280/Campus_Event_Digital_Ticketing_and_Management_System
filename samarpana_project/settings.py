@@ -63,13 +63,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'samarpana_project.wsgi.application'
 
 # Database
+# Database configuration - Force check for Supabase
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-    }
+print(f"Raw DATABASE_URL: {DATABASE_URL}")
+
+if DATABASE_URL and ('postgres' in DATABASE_URL or 'supabase' in DATABASE_URL):
+    try:
+        DATABASES = {
+            'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+        }
+        print("✅ Successfully connected to PostgreSQL/Supabase")
+    except Exception as e:
+        print(f"❌ Error parsing DATABASE_URL: {e}")
+        # Fallback to SQLite
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 else:
+    print("❌ DATABASE_URL not found or invalid")
     # Fallback for development
     DATABASES = {
         'default': {
@@ -77,6 +92,24 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# Add SSL requirement for Supabase
+if 'supabase' in DATABASE_URL:
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'require'
+    }
+    print("✅ SSL mode set to 'require' for Supabase")
+
+
+# Debug database connection
+print("=" * 50)
+print("DEBUGGING DATABASE CONNECTION")
+print("=" * 50)
+print(f"DATABASE_URL from environment: {os.environ.get('DATABASE_URL')}")
+print(f"All environment variables: {dict(os.environ)}")
+print(f"Using database: {DATABASES['default']['ENGINE']}")
+print("=" * 50)
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
