@@ -15,6 +15,9 @@ import dj_database_url
 import os   
 
 
+print("DATABASE_URL (in env):", repr(os.environ.get('DATABASE_URL')))
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
