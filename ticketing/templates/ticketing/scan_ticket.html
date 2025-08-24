@@ -3,10 +3,16 @@
 {% block content %}
 {% csrf_token %}
 <script src="https://unpkg.com/html5-qrcode"></script>
-<div id="qr-reader" style="width: 400px;"></div>
-<div id="ticket-info"></div>
-<div id="verify-btn-container">
-  <button id="verify-btn">Verify Ticket</button>
+<div class="qr-scanner">  <!-- Added wrapper div with .qr-scanner class -->
+
+  <div id="qr-reader" class="qr-scanner__reader" style="width: 400px;"></div> <!-- Added .qr-scanner__reader -->
+
+  <div id="ticket-info" class="qr-scanner__ticket-info"></div> <!-- Added .qr-scanner__ticket-info -->
+
+  <div id="verify-btn-container" style="display: flex; justify-content: center;">
+    <button id="verify-btn" class="qr-scanner__verify-btn">Verify Ticket</button> <!-- Added .qr-scanner__verify-btn -->
+  </div>
+
 </div>
 
 <script>
