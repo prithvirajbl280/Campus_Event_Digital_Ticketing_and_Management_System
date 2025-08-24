@@ -1,0 +1,9 @@
+{% extends 'ticketing/base.html' %}
+
+{% block content %}
+<div class="alert alert-success" role="alert">
+  <h3>Thank you for registering!</h3>
+  <p>Your details have been successfully submitted.</p>
+</div>
+<a href="{% url 'register_student' %}" class="btn btn-primary">Register another student</a>
+{% endblock %}

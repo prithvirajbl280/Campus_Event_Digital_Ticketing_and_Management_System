@@ -1,0 +1,13 @@
+{% extends 'ticketing/base.html' %}
+{% block content %}
+<h2>Student Registration</h2>
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Register</button>
+</form>
+
+<p>
+    <a href="{% url 'login' %}">Organiser Login</a>
+</p>
+
+{% endblock %}

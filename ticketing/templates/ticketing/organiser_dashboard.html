@@ -1,0 +1,22 @@
+{% extends 'ticketing/base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h2 class="dashboard-title">Welcome, {{ request.user.username }}!</h2>
+
+  <p class="dashboard-info">
+     You have confirmed {{ confirmed_count }} tickets so far.
+  </p>
+
+  <a href="{% url 'organiser_search' %}" class="btn btn-primary">Search Registrations</a>
+
+<a href="{% url 'ticket_scanner' %}" class="qr-scanner-button">
+  Open QR Scanner
+</a>
+
+  <form method="post" action="{% url 'logout' %}" class="logout-form">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-logout">Logout</button>
+  </form>
+</div>
+{% endblock %}

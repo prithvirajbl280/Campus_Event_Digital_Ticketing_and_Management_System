@@ -1,0 +1,79 @@
+{% extends 'ticketing/base.html' %}
+
+{% block content %}
+<h2 class="text-center mb-4">Admin Dashboard</h2>
+
+<div class="total-tickets-row d-flex justify-content-center mb-5">
+  <div class="total-tickets-box d-flex align-items-center">
+    <div class="label">Total Tickets Confirmed:</div>
+    <div class="count">{{ total_tickets }}</div>
+    <div>
+      <a href="{% url 'confirmed_tickets_list' %}" class="btn btn-primary btn-sm">View</a>
+    </div>
+  </div>
+</div>
+
+<!-- Add this just before the organisers heading -->
+<div class="cash-collected-link mb-4 text-center">
+  <a href="{% url 'organiser_cash_daywise' %}" class="btn btn-outline-primary btn-sm">
+    View Cash Collected Day-wise
+  </a>
+</div>
+
+<h3 class="mb-3 center-heading">ORGANISERS DATA</h3>
+
+<table class="organiser-table table table-bordered table-striped mx-auto mb-5">
+  <tbody>
+    {% for item in tickets_per_organiser %}
+      <tr>
+        <td>{{ item.confirmed_by__username }}</td>
+        <td>{{ item.count }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="2" class="text-center">No tickets confirmed yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3 class="mb-3 text-center">Ticket Confirmation Trend Over Time</h3>
+
+<div class="chart-wrapper mx-auto mb-4">
+  <canvas id="confirmationChart" width="600" height="300"></canvas>
+</div>
+
+<div class="logout-btn-wrapper text-center">
+  <form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Logout</button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+fetch("{% url 'ticket_confirmation_data' %}")
+.then(response => response.json())
+.then(data => {
+  const ctx = document.getElementById('confirmationChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.labels,
+      datasets: [{
+        label: 'Tickets Confirmed',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        data: data.counts,
+        fill: true,
+      }]
+    },
+    options: {
+      scales: {
+        x: { display: true, title: { display: true, text: 'Date' } },
+        y: { beginAtZero: true, title: { display: true, text: 'Tickets Confirmed' } }
+      }
+    }
+  });
+});
+</script>
+
+{% endblock %}

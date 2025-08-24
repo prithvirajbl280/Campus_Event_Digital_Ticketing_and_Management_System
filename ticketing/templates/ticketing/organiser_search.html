@@ -1,0 +1,38 @@
+{% extends 'ticketing/base.html' %}
+
+{% block content %}
+<h2>SEARCH STUDENT REGISTRATIONS</h2>
+
+<form method="get" class="search-form">
+    <input type="text" name="q" placeholder="Enter SRN or Name" value="{{ query }}" class="search-bar" autofocus />
+    <button type="submit" class="search-btn">Search</button>
+</form>
+
+{% if registrations %}
+<table class="reg-table">
+  <thead>
+    <tr>
+      <th>Date & Time</th>
+      <th>Name and SRN</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reg in registrations %}
+    <tr>
+      <td>{{ reg.created_at|date:"Y-m-d H:i" }}</td>
+      <td>{{ reg.name }} - {{ reg.srn }}</td>
+      <td>
+        <a href="{% url 'registration_detail' reg.id %}" class="view-details-btn btn">View Details</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}
+
+
+

@@ -1,0 +1,15 @@
+
+{% extends "ticketing/base.html" %}
+
+{% block content %}
+<div class="center-parent">
+    <h2>Account Login</h2>
+    <div class="center-box">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
