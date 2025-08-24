@@ -1,36 +1,32 @@
-
 {% extends 'ticketing/base.html' %}
 {% block content %}
 {% csrf_token %}
+
 <script src="https://unpkg.com/html5-qrcode"></script>
-<div class="qr-scanner">  <!-- Added wrapper div with .qr-scanner class -->
 
-  <div id="qr-reader" class="qr-scanner__reader" style="width: 400px;"></div> <!-- Added .qr-scanner__reader -->
-
-  <div id="ticket-info" class="qr-scanner__ticket-info"></div> <!-- Added .qr-scanner__ticket-info -->
-
-  <div id="verify-btn-container" style="display: flex; justify-content: center;">
-    <button id="verify-btn" class="qr-scanner__verify-btn">Verify Ticket</button> <!-- Added .qr-scanner__verify-btn -->
-  </div>
-
+<div class="qr-scanner">
+  <div id="qr-reader" class="qr-scanner__reader" style="width: 400px;"></div>
+  <div id="ticket-info" class="qr-scanner__ticket-info"></div>
+  <button id="verify-btn" class="qr-scanner__verify-btn">Verify Ticket</button>
 </div>
 
 <script>
 const verifyBtn = document.getElementById('verify-btn');
 const ticketInfo = document.getElementById('ticket-info');
 let currentTicketId = null;
-let verifiedMessageTimeout = null;
 
-function clearVerifiedMessage() {
-  ticketInfo.innerText = '';
+// Remove previously shown ticket info styles
+function clearTicketInfoStyles() {
+  ticketInfo.classList.remove('qr-scanner__ticket-info--valid', 'qr-scanner__ticket-info--verified');
+  ticketInfo.style.backgroundColor = ''; // Clear inline background color if any
 }
 
-// Shows an "OK" button next to the message to clear "already verified" message
 function showAlreadyVerifiedMessage(message) {
-  // Clear existing content and add message
+  clearTicketInfoStyles();
+  ticketInfo.classList.add('qr-scanner__ticket-info--verified');
   ticketInfo.innerText = message;
 
-  // Create OK button if not exists
+  // Create OK button if not present
   if (!document.getElementById('ok-btn')) {
     const okBtn = document.createElement('button');
     okBtn.id = 'ok-btn';
@@ -50,6 +46,7 @@ function showAlreadyVerifiedMessage(message) {
     okBtn.style.userSelect = 'none';
     okBtn.style.width = 'max-content';
     okBtn.onclick = () => {
+      clearTicketInfoStyles(); // Clear background colors
       ticketInfo.innerText = '';
       okBtn.remove();
     };
@@ -64,22 +61,25 @@ function onScanSuccess(decodedText) {
       'Content-Type': 'application/json',
       'X-CSRFToken': '{{ csrf_token }}'
     },
-    body: JSON.stringify({ticket_id: decodedText})
+    body: JSON.stringify({ ticket_id: decodedText })
   })
   .then(res => res.json())
   .then(data => {
-    clearTimeout(verifiedMessageTimeout);
-    document.getElementById('ok-btn')?.remove();
+    clearTicketInfoStyles();
+    const existingOkBtn = document.getElementById('ok-btn');
+    if (existingOkBtn) existingOkBtn.remove();
 
     if (data.show_verify) {
+      ticketInfo.classList.add('qr-scanner__ticket-info--valid');
       ticketInfo.innerText = `Name: ${data.name}\nSRN: ${data.srn}`;
       verifyBtn.style.display = 'inline-block';
       currentTicketId = decodedText;
-    } else if (data.message === "Ticket already verified.") {
+    } else if (data.message === 'Ticket already verified.') {
       verifyBtn.style.display = 'none';
       currentTicketId = null;
       showAlreadyVerifiedMessage(data.message);
     } else {
+      ticketInfo.classList.add('qr-scanner__ticket-info--valid');
       ticketInfo.innerText = data.message;
       verifyBtn.style.display = 'none';
       currentTicketId = null;
@@ -94,18 +94,22 @@ verifyBtn.onclick = function() {
       'Content-Type': 'application/json',
       'X-CSRFToken': '{{ csrf_token }}'
     },
-    body: JSON.stringify({ticket_id: currentTicketId})
+    body: JSON.stringify({ ticket_id: currentTicketId })
   })
   .then(res => res.json())
   .then(data => {
     alert(data.message);
+    clearTicketInfoStyles(); // Clear background colors
     ticketInfo.innerText = data.message;
     verifyBtn.style.display = 'none';
 
-    // Clear message after 5 seconds
-    verifiedMessageTimeout = setTimeout(() => {
-      ticketInfo.innerText = '';
-    }, 5000);
+    // Clear message after 5 seconds for successful verification
+    if (data.message === 'Ticket verified successfully.') {
+      setTimeout(() => {
+        clearTicketInfoStyles(); // Clear background colors
+        ticketInfo.innerText = '';
+      }, 5000);
+    }
   });
 };
 
