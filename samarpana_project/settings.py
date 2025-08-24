@@ -104,7 +104,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    BASE_DIR / 'ticketing' / 'static',
+    BASE_DIR / 'ticketing' / 'static' / 'ticketing',
 ]
 
 # Static files storage with Whitenoise
