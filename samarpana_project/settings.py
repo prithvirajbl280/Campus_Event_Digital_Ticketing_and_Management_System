@@ -27,6 +27,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 if not SECRET_KEY:
     raise Exception("DJANGO_SECRET_KEY environment variable not set!")
+
+
+print("DJANGO_SECRET_KEY:", repr(os.environ.get('DJANGO_SECRET_KEY')))
+
     
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
