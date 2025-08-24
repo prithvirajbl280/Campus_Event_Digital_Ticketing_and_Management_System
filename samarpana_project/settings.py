@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-(73k20$r=ow6j*k*klvu9ip_5)knnuofhdcn2-@((@ugg5b^d+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['web-production-f81e.up.railway.app']
 
 
 
