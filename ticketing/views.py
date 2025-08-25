@@ -151,38 +151,38 @@ def no_permission(request):
 @user_passes_test(is_organiser, login_url='no_permission')
 def registration_detail(request, registration_id):
     registration = get_object_or_404(Registration, id=registration_id)
-
-    # Calculate the current ticket price dynamically
-    ticket_price = get_current_ticket_price()
-
+    
+    ticket_price = get_current_ticket_price()  # Get dynamic price
+    
     if request.method == 'POST':
         form = TicketConfirmationForm(request.POST)
         if form.is_valid():
-            confirmation_exists = TicketConfirmation.objects.filter(student=registration).exists()
-            if confirmation_exists:
+            if TicketConfirmation.objects.filter(student=registration).exists():
                 messages.error(request, "This ticket has already been confirmed.")
                 return redirect('organiser_dashboard')
 
-            try:
-                confirmation = form.save(commit=False)
-                confirmation.student = registration
-                confirmation.confirmed_by = request.user
-                confirmation.price = ticket_price  # Save the dynamic price here
-                confirmation.save()
-                messages.success(request, "Ticket confirmed successfully.")
-                return redirect('organiser_dashboard')
-            except IntegrityError:
-                messages.error(request, "Duplicate confirmation detected.")
-                return redirect('organiser_dashboard')
+            confirmation = form.save(commit=False)
+            confirmation.student = registration
+            confirmation.confirmed_by = request.user
+            confirmation.price = ticket_price  # Save price here
+            confirmation.save()
+            messages.success(request, "Ticket confirmed successfully.")
+            return redirect('organiser_dashboard')
     else:
         form = TicketConfirmationForm()
-
-    # Pass the price to template for display (readonly)
+    
     return render(request, 'ticketing/registration_detail.html', {
         'registration': registration,
         'form': form,
         'ticket_price': ticket_price,  # Pass price for display
     })
+
+
+def get_current_ticket_price():
+    confirmed_count = TicketConfirmation.objects.count()
+    return 300 if confirmed_count < 250 else 400
+
+
 
 
 @login_required
