@@ -163,27 +163,33 @@ def no_permission(request):
 @user_passes_test(is_organiser, login_url='no_permission')
 def registration_detail(request, registration_id):
     registration = get_object_or_404(Registration, id=registration_id)
-    ticket_price = get_current_ticket_price()  # Get dynamic price
-    
+
+    # Calculate the current ticket price dynamically
+    ticket_price = get_current_ticket_price()
+
     if request.method == 'POST':
         form = TicketConfirmationForm(request.POST)
         if form.is_valid():
-            if TicketConfirmation.objects.filter(student=registration).exists():
+            confirmation_exists = TicketConfirmation.objects.filter(student=registration).exists()
+            if confirmation_exists:
                 messages.error(request, "This ticket has already been confirmed.")
                 return redirect('organiser_dashboard')
-            
-            confirmation = form.save(commit=False)
-            confirmation.student = registration
-            confirmation.confirmed_by = request.user
-            confirmation.price = ticket_price  # Save price here
-            print("DEBUG: confirmation.price =", confirmation.price)
-            confirmation.save()
-            
-            messages.success(request, "Ticket confirmed successfully.")
-            return redirect('organiser_dashboard')
+
+            try:
+                confirmation = form.save(commit=False)
+                confirmation.student = registration
+                confirmation.confirmed_by = request.user
+                confirmation.price = ticket_price  # Save the dynamic price here
+                confirmation.save()
+                messages.success(request, "Ticket confirmed successfully.")
+                return redirect('organiser_dashboard')
+            except IntegrityError:
+                messages.error(request, "Duplicate confirmation detected.")
+                return redirect('organiser_dashboard')
     else:
         form = TicketConfirmationForm()
-    
+
+    # Pass the price to template for display (readonly)
     return render(request, 'ticketing/registration_detail.html', {
         'registration': registration,
         'form': form,
