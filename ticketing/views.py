@@ -1,23 +1,20 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Count, Q
-from django.http import JsonResponse
-from .models import Registration, TicketConfirmation
-from .forms import RegistrationForm, TicketConfirmationForm
-from django.db.models import Q
-from django.db.models import Sum
-from django.db.models.functions import TruncDate
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
-from django.shortcuts import redirect
+from django.db.models import Count, Q, Sum
+from django.http import JsonResponse, HttpResponse
+from django.db.models.functions import TruncDate, TruncDay
+from django.contrib.auth.views import LoginView, LogoutView
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import IntegrityError
 from django.contrib import messages
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.timezone import now
 import json
+import csv
 
+from .models import Registration, TicketConfirmation
+from .forms import RegistrationForm, TicketConfirmationForm
 
 
 def is_ajax(request):
@@ -28,14 +25,13 @@ def is_organiser(user):
     return user.is_authenticated and user.groups.filter(name='Organiser').exists()
 
 
-# Public registration form for students with AJAX support
 @never_cache
 def register_student(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('thank_you')  # Redirect after POST - change URL name accordingly
+            return redirect('thank_you')
     else:
         form = RegistrationForm()
     return render(request, 'ticketing/registration_form.html', {'form': form})
@@ -45,8 +41,6 @@ def thank_you(request):
     return render(request, 'ticketing/thank_you.html')
 
 
-# Organiser Portal to search registrations (read-only),
-# excluding registrations that are already confirmed
 @login_required
 @user_passes_test(is_organiser, login_url='no_permission')
 def organiser_search(request):
@@ -59,18 +53,23 @@ def organiser_search(request):
     return render(request, 'ticketing/organiser_search.html', {'registrations': registrations, 'query': query})
 
 
-# Organiser confirms tickets
+# Dynamic ticket price helper
+def get_current_ticket_price():
+    confirmed_count = TicketConfirmation.objects.count()
+    return 300 if confirmed_count < 250 else 400
+
+
 @never_cache
 @login_required
 @user_passes_test(is_organiser, login_url='no_permission')
-def confirm_ticket(request, registration_id):
+def registration_detail(request, registration_id):
     registration = get_object_or_404(Registration, id=registration_id)
+    ticket_price = get_current_ticket_price()
 
     if request.method == 'POST':
         form = TicketConfirmationForm(request.POST)
         if form.is_valid():
-            confirmation_exists = TicketConfirmation.objects.filter(student=registration).exists()
-            if confirmation_exists:
+            if TicketConfirmation.objects.filter(student=registration).exists():
                 messages.error(request, "This ticket has already been confirmed.")
                 return redirect('organiser_dashboard')
 
@@ -78,6 +77,7 @@ def confirm_ticket(request, registration_id):
                 confirmation = form.save(commit=False)
                 confirmation.student = registration
                 confirmation.confirmed_by = request.user
+                confirmation.price = ticket_price  # set dynamic price 
                 confirmation.save()
                 messages.success(request, "Ticket confirmed successfully.")
                 return redirect('organiser_dashboard')
@@ -87,103 +87,11 @@ def confirm_ticket(request, registration_id):
     else:
         form = TicketConfirmationForm()
 
-    return render(request, 'ticketing/confirm_ticket.html', {'form': form, 'student': registration})
-
-
-# Organiser dashboard showing number of confirmed tickets by them
-@never_cache
-@login_required
-@user_passes_test(is_organiser, login_url='no_permission')
-def organiser_dashboard(request):
-    count = TicketConfirmation.objects.filter(confirmed_by=request.user).count()
-    return render(request, 'ticketing/organiser_dashboard.html', {'confirmed_count': count})
-
-
-# Admin dashboard with summary and charts data
-@never_cache
-@login_required
-def admin_dashboard(request):
-    if not request.user.is_superuser:
-        return redirect('no_permission')
-
-    total_tickets = TicketConfirmation.objects.count()
-    tickets_per_organiser = (
-        TicketConfirmation.objects
-        .values('confirmed_by__username')
-        .annotate(count=Count('id'))
-        .order_by('-count')
-    )
-
-    return render(request, 'ticketing/admin_dashboard.html', {
-        'total_tickets': total_tickets,
-        'tickets_per_organiser': tickets_per_organiser,
-    })
-
-
-# API endpoint for chart data (admin)
-@login_required
-def ticket_confirmation_data(request):
-    if not request.user.is_superuser:
-        return JsonResponse({'error': 'Unauthorized'}, status=403)
-
-    from django.db.models.functions import TruncDay
-
-    data = (TicketConfirmation.objects
-            .annotate(day=TruncDay('confirmed_at'))
-            .values('day')
-            .order_by('day')
-            .annotate(count=Count('id')))
-
-    chart_data = {
-        'labels': [entry['day'].strftime("%Y-%m-%d") for entry in data],
-        'counts': [entry['count'] for entry in data]
-    }
-    return JsonResponse(chart_data)
-
-
-# Simple no permission view (optional)
-def no_permission(request):
-    return render(request, 'ticketing/no_permission.html')
-
-
-@never_cache
-@login_required
-@user_passes_test(is_organiser, login_url='no_permission')
-def registration_detail(request, registration_id):
-    registration = get_object_or_404(Registration, id=registration_id)
-    
-    ticket_price = get_current_ticket_price()  # Get dynamic price
-    
-    if request.method == 'POST':
-        form = TicketConfirmationForm(request.POST)
-        if form.is_valid():
-            if TicketConfirmation.objects.filter(student=registration).exists():
-                messages.error(request, "This ticket has already been confirmed.")
-                return redirect('organiser_dashboard')
-
-            confirmation = form.save(commit=False)
-            confirmation.student = registration
-            confirmation.confirmed_by = request.user
-            confirmation.price = ticket_price  # Save price here
-            print("DEBUG: confirmation.price =", confirmation.price)
-            confirmation.save()
-            messages.success(request, "Ticket confirmed successfully.")
-            return redirect('organiser_dashboard')
-    else:
-        form = TicketConfirmationForm()
-    
     return render(request, 'ticketing/registration_detail.html', {
         'registration': registration,
         'form': form,
-        'ticket_price': ticket_price,  # Pass price for display
+        'ticket_price': ticket_price,
     })
-
-
-def get_current_ticket_price():
-    confirmed_count = TicketConfirmation.objects.count()
-    return 300 if confirmed_count < 250 else 400
-
-
 
 
 @login_required
@@ -214,22 +122,20 @@ def organiser_cash_daywise(request):
         return redirect('no_permission')
 
     cash_tickets = TicketConfirmation.objects.filter(payment_type='Cash')
+
     summary = (
         cash_tickets
         .annotate(day=TruncDate('confirmed_at'))
         .values('day', 'confirmed_by__username')
-        .annotate(cash_count=Count('id'))
+        .annotate(
+            cash_count=Count('id'),
+            total_cash=Sum('price')  # sum actual prices
+        )
         .order_by('day', 'confirmed_by__username')
     )
 
-    ticket_price = 400
-    # Add total_cash field for convenience in template
-    for row in summary:
-        row['total_cash'] = row['cash_count'] * ticket_price
-
     return render(request, 'ticketing/organiser_cash_daywise.html', {
         'summary': summary,
-        'ticket_price': ticket_price,
     })
 
 
@@ -237,16 +143,13 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_superuser:
-            return '/custom_admin/dashboard/'  # Custom admin dashboard URL
+            return '/custom_admin/dashboard/'
         else:
-            return '/organiser/dashboard/'     # Organiser dashboard URL
+            return '/organiser/dashboard/'
 
 
 class CustomLogoutView(LogoutView):
-    next_page = '/accounts/login/'  # URL to redirect after logout (login page)
-
-
-
+    next_page = '/accounts/login/'
 
 
 @csrf_exempt
@@ -293,12 +196,35 @@ def verify_ticket(request):
         return JsonResponse({'message': 'Ticket verified successfully.'})
 
 
-
 @login_required
 @user_passes_test(is_organiser, login_url='no_permission')
 def ticket_scanner(request):
     return render(request, 'ticketing/scan_ticket.html')
 
 
+@staff_member_required
+def pushback_admin(request):
+    tickets = TicketConfirmation.objects.select_related('student', 'confirmed_by').all()
 
+    if request.method == 'POST':
+        if 'pushback_ticket_id' in request.POST:
+            ticket_id = request.POST.get('pushback_ticket_id')
+            TicketConfirmation.objects.filter(id=ticket_id).update(pushback=1)
+            return redirect('pushback_admin')
 
+        elif 'download' in request.POST:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=tickets.csv'
+            writer = csv.writer(response)
+            writer.writerow(['Ticket ID', 'Student', 'Confirmed By', 'Pushback', 'Confirmed At'])
+            for ticket in tickets:
+                writer.writerow([
+                    ticket.ticket_id,
+                    ticket.student.name,
+                    ticket.confirmed_by.username if ticket.confirmed_by else 'Unknown',
+                    ticket.pushback,
+                    ticket.confirmed_at.strftime('%Y-%m-%d %H:%M')
+                ])
+            return response
+
+    return render(request, 'ticketing/pushback_admin.html', {'tickets': tickets})
