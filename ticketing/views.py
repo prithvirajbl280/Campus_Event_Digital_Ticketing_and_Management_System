@@ -165,6 +165,7 @@ def registration_detail(request, registration_id):
             confirmation.student = registration
             confirmation.confirmed_by = request.user
             confirmation.price = ticket_price  # Save price here
+            print("DEBUG: confirmation.price =", confirmation.price)
             confirmation.save()
             messages.success(request, "Ticket confirmed successfully.")
             return redirect('organiser_dashboard')
