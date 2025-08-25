@@ -170,8 +170,8 @@ def registration_detail(request, registration_id):
     if request.method == 'POST':
         form = TicketConfirmationForm(request.POST)
         if form.is_valid():
-            confirmation_exists = TicketConfirmation.objects.filter(student=registration).exists()
-            if confirmation_exists:
+            print("DEBUG: FORM is valid, proceeding to save confirmation")
+            if TicketConfirmation.objects.filter(student=registration).exists():
                 messages.error(request, "This ticket has already been confirmed.")
                 return redirect('organiser_dashboard')
 
@@ -181,11 +181,15 @@ def registration_detail(request, registration_id):
                 confirmation.confirmed_by = request.user
                 confirmation.price = ticket_price  # Save the dynamic price here
                 confirmation.save()
+                print("DEBUG: Confirmation saved successfully")
                 messages.success(request, "Ticket confirmed successfully.")
                 return redirect('organiser_dashboard')
-            except IntegrityError:
-                messages.error(request, "Duplicate confirmation detected.")
+            except Exception as e:
+                print(f"ERROR saving confirmation: {e}")
+                messages.error(request, f"Error saving ticket confirmation: {e}")
                 return redirect('organiser_dashboard')
+        else:
+            print("DEBUG: FORM invalid, errors:", form.errors)
     else:
         form = TicketConfirmationForm()
 
@@ -195,6 +199,7 @@ def registration_detail(request, registration_id):
         'form': form,
         'ticket_price': ticket_price,  # Pass price for display
     })
+
 
 
 def get_current_ticket_price():
