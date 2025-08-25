@@ -42,6 +42,17 @@
     {% csrf_token %}
     {{ form.as_p }}
 
+    {% if form.errors %}
+      <div style="color: red;">
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          {% for error in field.errors %}
+            <p>{{ field.label }}: {{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <script>
       function toggleUtrField() {
         const paymentType = document.getElementById("id_payment_type").value;
