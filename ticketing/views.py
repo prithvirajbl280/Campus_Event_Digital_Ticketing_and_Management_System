@@ -152,6 +152,9 @@ def no_permission(request):
 def registration_detail(request, registration_id):
     registration = get_object_or_404(Registration, id=registration_id)
 
+    # Calculate the current ticket price dynamically
+    ticket_price = get_current_ticket_price()
+
     if request.method == 'POST':
         form = TicketConfirmationForm(request.POST)
         if form.is_valid():
@@ -164,6 +167,7 @@ def registration_detail(request, registration_id):
                 confirmation = form.save(commit=False)
                 confirmation.student = registration
                 confirmation.confirmed_by = request.user
+                confirmation.price = ticket_price  # Save the dynamic price here
                 confirmation.save()
                 messages.success(request, "Ticket confirmed successfully.")
                 return redirect('organiser_dashboard')
@@ -173,9 +177,11 @@ def registration_detail(request, registration_id):
     else:
         form = TicketConfirmationForm()
 
+    # Pass the price to template for display (readonly)
     return render(request, 'ticketing/registration_detail.html', {
         'registration': registration,
         'form': form,
+        'ticket_price': ticket_price,  # Pass price for display
     })
 
 
