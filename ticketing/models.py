@@ -44,6 +44,8 @@ class TicketConfirmation(models.Model):
     ticket_id = models.CharField(max_length=6, unique=True, blank=True, null=True)
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     verified = models.BooleanField(default=False)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=400)
+
 
     def __str__(self):
         return f"Ticket for {self.student.name} confirmed by {self.confirmed_by.username}"
