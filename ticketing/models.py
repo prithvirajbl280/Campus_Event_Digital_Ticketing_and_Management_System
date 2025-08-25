@@ -44,6 +44,7 @@ class TicketConfirmation(models.Model):
     ticket_id = models.CharField(max_length=6, unique=True, blank=True, null=True)
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     verified = models.BooleanField(default=False)
+    pushback = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=400)
 
 
