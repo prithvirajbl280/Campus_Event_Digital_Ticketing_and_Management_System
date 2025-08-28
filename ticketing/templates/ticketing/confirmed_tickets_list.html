@@ -28,6 +28,10 @@
       <th>Confirmed At</th>
       <th>Payment Type</th>
       <th>UTR Number</th>
+      <th>Hostelite</th>
+      <th>Hostel Block/Unit</th>
+      <th>Room Number</th>
+
     </tr>
   </thead>
   <tbody>
@@ -42,6 +46,10 @@
       <td>{{ ticket.confirmed_at|date:"Y-m-d H:i" }}</td>
       <td>{{ ticket.payment_type }}</td>
       <td>{{ ticket.utr_number }}</td>
+      <td>{{ ticket.student.hostelite }}</td>
+      <td>{{ ticket.student.hostel_block }}</td>
+      <td>{{ ticket.student.room_number }}</td>
+
     </tr>
     {% empty %}
     <tr><td colspan="9" class="text-center">No confirmed tickets found.</td></tr>
