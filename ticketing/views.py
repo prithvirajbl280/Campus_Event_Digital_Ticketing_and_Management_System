@@ -233,24 +233,22 @@ def confirmed_tickets_list(request):
 def organiser_cash_daywise(request):
     if not request.user.is_superuser:
         return redirect('no_permission')
-    
+
     cash_tickets = TicketConfirmation.objects.filter(payment_type='Cash')
+
     summary = (
         cash_tickets
         .annotate(day=TruncDate('confirmed_at'))
         .values('day', 'confirmed_by__username')
-        .annotate(cash_count=Count('id'))
+        .annotate(
+            cash_count=Count('id'),
+            total_cash=Sum('price')  # Sum actual prices from DB
+        )
         .order_by('day', 'confirmed_by__username')
     )
-    
-    ticket_price = 400
-    # Add total_cash field for convenience in template
-    for row in summary:
-        row['total_cash'] = row['cash_count'] * ticket_price
-    
+
     return render(request, 'ticketing/organiser_cash_daywise.html', {
         'summary': summary,
-        'ticket_price': ticket_price,
     })
 
 
