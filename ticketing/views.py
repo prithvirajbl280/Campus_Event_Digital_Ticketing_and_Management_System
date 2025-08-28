@@ -11,6 +11,8 @@ from django.db.models.functions import TruncDate, TruncDay
 import json
 from .models import Registration, TicketConfirmation
 from .forms import RegistrationForm, TicketConfirmationForm
+from django.db.models import Sum
+
 
 def is_ajax(request):
     return request.headers.get('x-requested-with') == 'XMLHttpRequest'
