@@ -14,6 +14,11 @@ class Registration(models.Model):
         ('4th Year', '4th Year'),
         ('Graduated', 'Graduated'),
     ]
+    HOSTEL_CHOICES = [
+        ('Yes', 'Yes'),
+        ('No', 'No'),
+    ]
+
     name = models.CharField(max_length=100)
     srn = models.CharField(max_length=50)
     prn = models.CharField(max_length=50, blank=True, null=True)
@@ -22,8 +27,14 @@ class Registration(models.Model):
     phone = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # New hostel-related fields
+    hostelite = models.CharField(max_length=3, choices=HOSTEL_CHOICES, default='No')
+    hostel_block = models.CharField(max_length=100, blank=True, null=True)
+    room_number = models.CharField(max_length=50, blank=True, null=True)
+
     def __str__(self):
         return f"{self.name} ({self.srn})"
+
 
 
 class TicketConfirmation(models.Model):
