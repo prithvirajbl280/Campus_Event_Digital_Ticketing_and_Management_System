@@ -1,19 +1,16 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Count, Q, Sum
-from django.db.models import Sum
-from django.http import JsonResponse, HttpResponse
-from django.db.models.functions import TruncDate, TruncDay
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.decorators.cache import never_cache
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count, Q
+from django.http import JsonResponse
 from django.db import IntegrityError
 from django.contrib import messages
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.timezone import now
+from django.db.models.functions import TruncDate, TruncDay
 import json
-import csv
-
+from .models import Registration, TicketConfirmation
+from .forms import RegistrationForm, TicketConfirmationForm
 
 def is_ajax(request):
     return request.headers.get('x-requested-with') == 'XMLHttpRequest'
