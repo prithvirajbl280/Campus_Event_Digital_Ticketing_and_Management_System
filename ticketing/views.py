@@ -238,13 +238,13 @@ def organiser_cash_daywise(request):
 
     summary = (
         cash_tickets
-        .annotate(day=TruncDate('confirmed_at'))
-        .values('day', 'confirmed_by__username')
+        .annotate(dconfirmed_day=TruncDate('confirmed_at'))
+        .values('confirmed_day', 'confirmed_by__username')
         .annotate(
             cash_count=Count('id'),
             total_cash=Sum('price')  # Sum actual prices from DB
         )
-        .order_by('day', 'confirmed_by__username')
+        .order_by('confirmed_day', 'confirmed_by__username')
     )
 
     return render(request, 'ticketing/organiser_cash_daywise.html', {
