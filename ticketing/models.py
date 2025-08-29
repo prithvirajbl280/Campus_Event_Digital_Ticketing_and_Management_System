@@ -12,7 +12,6 @@ class Registration(models.Model):
         ('2nd Year', '2nd Year'),
         ('3rd Year', '3rd Year'),
         ('4th Year', '4th Year'),
-        ('Graduated', 'Graduated'),
     ]
     HOSTEL_CHOICES = [
         ('Yes', 'Yes'),
@@ -57,6 +56,8 @@ class TicketConfirmation(models.Model):
     verified = models.BooleanField(default=False)
     pushback = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=400)
+    day = models.IntegerField(default=2)
+
 
 
     def __str__(self):
