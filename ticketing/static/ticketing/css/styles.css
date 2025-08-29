@@ -580,7 +580,7 @@ form[role="search"] button.btn {
 
 .qr-scanner__reader {
   width: 90vw;               /* Use 90% of viewport width */
-  max-width: 300px;          /* Keep max width 400px */
+  max-width: 250px;          /* Keep max width 400px */
   margin: 20px auto;         /* Center horizontally & add vertical gap */
   border: 3px solid #007bff;
   border-radius: 8px;
