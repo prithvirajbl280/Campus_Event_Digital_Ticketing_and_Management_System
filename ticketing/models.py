@@ -56,7 +56,7 @@ class TicketConfirmation(models.Model):
     verified = models.BooleanField(default=False)
     pushback = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=400)
-    day = models.IntegerField(default=2)
+    day = models.IntegerField(default=1)
 
 
 
