@@ -578,10 +578,14 @@ form[role="search"] button.btn {
 }
 
 .qr-scanner__reader {
-  width: 400px;
+  width: 90vw;               /* Use 90% of viewport width */
+  max-width: 400px;          /* Keep max width 400px */
+  margin: 20px auto;         /* Center horizontally & add vertical gap */
   border: 3px solid #007bff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: block;            /* Ensure block-level for margin auto */
+  box-sizing: border-box;    /* Include border in width */
 }
 
 .qr-scanner__ticket-info {
