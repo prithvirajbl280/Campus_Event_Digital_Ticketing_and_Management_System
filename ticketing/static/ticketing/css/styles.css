@@ -578,15 +578,27 @@ form[role="search"] button.btn {
 }
 
 .qr-scanner__reader {
-  width: 90vw;               /* Use 90% of viewport width */
-  max-width: 400px;          /* Keep max width 400px */
-  margin: 20px auto;         /* Center horizontally & add vertical gap */
+  width: 250px;                  /* Smaller width for mobile scanners */
+  height: 250px;                 /* Fixed height for square scanner */
+  margin: 60px auto;             /* Adds space above and below + centers horizontally */
   border: 3px solid #007bff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: block;            /* Ensure block-level for margin auto */
-  box-sizing: border-box;    /* Include border in width */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  background: #000;              /* So it feels visually like a scanner */
+  display: block;
+  box-sizing: border-box;
+  position: relative;            /* For additional styling if needed */
 }
+
+/* Optionally, ensure it responds well to small screens: */
+@media (max-width: 400px) {
+  .qr-scanner__reader {
+    width: 90vw;
+    height: 90vw;
+    margin: 40px auto;
+  }
+}
+
 
 .qr-scanner__ticket-info {
   margin-top: 20px;
