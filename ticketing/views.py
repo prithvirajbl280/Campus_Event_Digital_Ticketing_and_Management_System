@@ -139,14 +139,14 @@ def ticket_confirmation_data(request):
     
     data = (
         TicketConfirmation.objects
-        .annotate(day=TruncDay('confirmed_at'))
-        .values('day')
-        .order_by('day')
+        .annotate(confirmed_day=TruncDay('confirmed_at'))
+        .values('confirmed_day')
+        .order_by('confirmed_day')
         .annotate(count=Count('id'))
     )
     
     chart_data = {
-        'labels': [entry['day'].strftime("%Y-%m-%d") for entry in data],
+        'labels': [entry['confirmed_day'].strftime("%Y-%m-%d") for entry in data],
         'counts': [entry['count'] for entry in data]
     }
     
