@@ -519,11 +519,23 @@ form[role="search"] button.btn {
 /* If you want custom styles, add here */
 
 
-.qr-scanner-button {
+/* .qr-scanner-button {
   display: inline-block;
-  width: 500px; /* fixed width */
+  width: 500px; 
   text-align: center;
   padding: 10px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #28a745;  
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
+
+.qr-scanner-button {
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
@@ -533,7 +545,14 @@ form[role="search"] button.btn {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
+  max-width: 400px;  /* Adjust width as needed */
+  width: 100%;       /* Responsive on smaller screens */
+  display: inline-block;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 16px;
+} 
+
 
 .qr-scanner-button:hover {
   background-color: #1e7e34;  /* Darker green on hover */
