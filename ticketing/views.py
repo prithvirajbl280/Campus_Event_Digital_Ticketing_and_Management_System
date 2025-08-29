@@ -238,7 +238,7 @@ def organiser_cash_daywise(request):
 
     summary = (
         cash_tickets
-        .annotate(dconfirmed_day=TruncDate('confirmed_at'))
+        .annotate(confirmed_day=TruncDate('confirmed_at'))
         .values('confirmed_day', 'confirmed_by__username')
         .annotate(
             cash_count=Count('id'),
