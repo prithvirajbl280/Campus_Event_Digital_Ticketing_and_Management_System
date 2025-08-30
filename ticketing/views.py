@@ -13,7 +13,6 @@ from .models import Registration, TicketConfirmation
 from .forms import RegistrationForm, TicketConfirmationForm
 from django.db.models import Sum
 from django.utils.timezone import now
-from django.utils.timezone import localtime
 
 
 
@@ -135,31 +134,24 @@ def admin_dashboard(request):
     })
 
 
-API endpoint for chart data (admin)
+# Chart data API for admin
 @login_required
 def ticket_confirmation_data(request):
     if not request.user.is_superuser:
         return JsonResponse({'error': 'Unauthorized'}, status=403)
 
-    data = (
-        TicketConfirmation.objects
-        .annotate(confirmed_hour=TruncHour('confirmed_at'))   # <-- changed here
-        .values('confirmed_hour')
-        .order_by('confirmed_hour')
-        .annotate(count=Count('id'))
-    )
+    data = (TicketConfirmation.objects
+            .filter(pushback=0)
+            .annotate(confirmed_day=TruncDay('confirmed_at'))
+            .values('confirmed_day')
+            .order_by('confirmed_day')
+            .annotate(count=Count('id')))
 
     chart_data = {
-        'labels': [entry['confirmed_hour'].strftime("%Y-%m-%d %H:00") for entry in data],
+        'labels': [entry['confirmed_day'].strftime("%Y-%m-%d") for entry in data],
         'counts': [entry['count'] for entry in data]
     }
     return JsonResponse(chart_data)
-
-
-
-
-
-
 
 
 # Simple no permission view (optional)
