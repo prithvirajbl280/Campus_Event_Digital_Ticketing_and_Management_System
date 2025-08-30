@@ -170,7 +170,6 @@ def ticket_confirmation_data(request):
 
     data = (
         TicketConfirmation.objects
-        .filter(pushback=0)
         .annotate(confirmed_hour=TruncHour('confirmed_at'))
         .values('confirmed_hour')
         .order_by('confirmed_hour')
