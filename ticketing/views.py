@@ -13,6 +13,8 @@ from .models import Registration, TicketConfirmation
 from .forms import RegistrationForm, TicketConfirmationForm
 from django.db.models import Sum
 from django.utils.timezone import now
+from django.utils.timezone import localtime
+
 
 
 
@@ -134,6 +136,33 @@ def admin_dashboard(request):
 
 
 # API endpoint for chart data (admin)
+# @login_required
+# def ticket_confirmation_data(request):
+#     if not request.user.is_superuser:
+#         return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+#     data = (
+#         TicketConfirmation.objects
+#         .annotate(confirmed_hour=TruncHour('confirmed_at'))   # <-- changed here
+#         .values('confirmed_hour')
+#         .order_by('confirmed_hour')
+#         .annotate(count=Count('id'))
+#     )
+
+#     chart_data = {
+#         'labels': [entry['confirmed_hour'].strftime("%Y-%m-%d %H:00") for entry in data],
+#         'counts': [entry['count'] for entry in data]
+#     }
+#     return JsonResponse(chart_data)
+
+
+
+
+def safe_strftime(dt):
+    if dt:
+        return localtime(dt).strftime("%Y-%m-%d %H:00")
+    return ''
+
 @login_required
 def ticket_confirmation_data(request):
     if not request.user.is_superuser:
@@ -141,17 +170,21 @@ def ticket_confirmation_data(request):
 
     data = (
         TicketConfirmation.objects
-        .annotate(confirmed_hour=TruncHour('confirmed_at'))   # <-- changed here
+        .filter(pushback=0)
+        .annotate(confirmed_hour=TruncHour('confirmed_at'))
         .values('confirmed_hour')
         .order_by('confirmed_hour')
         .annotate(count=Count('id'))
     )
 
     chart_data = {
-        'labels': [entry['confirmed_hour'].strftime("%Y-%m-%d %H:00") for entry in data],
-        'counts': [entry['count'] for entry in data]
+        'labels': [safe_strftime(entry['confirmed_hour']) for entry in data if entry['confirmed_hour'] is not None],
+        'counts': [entry['count'] for entry in data if entry['confirmed_hour'] is not None],
     }
     return JsonResponse(chart_data)
+
+
+
 
 
 
