@@ -660,32 +660,49 @@ form[role="search"] button.btn {
 
 
 
-.form-input {
-    width: 300px;
+
+.registration-form {
+    width: 400px;
+    padding: 30px;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    background-color: #fff;
+    text-align: center;  /* Center-align heading and contents */
+}
+
+/* Form fields styling - keep inputs centered and block */
+.registration-form .form-input,
+.registration-form .form-select {
+    display: block;
+    margin: 10px auto;
+    width: 90%;
     padding: 8px;
-    margin-bottom: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.form-select {
-    width: 315px;
-    padding: 8px;
-    margin-bottom: 12px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-}
-
-button {
+/* Button Styling */
+.registration-form button {
+    margin-top: 15px;
+    width: 95%;
+    padding: 10px;
     background-color: #4CAF50;
     color: white;
-    padding: 10px 18px;
     border: none;
-    cursor: pointer;
     border-radius: 5px;
+    cursor: pointer;
 }
 
-button:hover {
+.registration-form button:hover {
     background-color: #45a049;
 }
 
+/* Link centered below the form */
+.registration-form p {
+    margin-top: 15px;
+}
