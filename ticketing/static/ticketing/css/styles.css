@@ -666,16 +666,13 @@ form[role="search"] button.btn {
     padding: 30px;
     margin: auto;
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+/*     top: 50%;
+    transform: translateY(-50%); */
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0,0,0,0.1);
     background-color: #fff;
     text-align: center;  /* Center-align heading and contents */
-    max-height: 90vh;      /* Limit max height to 90% viewport height */
-    overflow-y: auto;      /* Enable vertical scrollbar when content overflows */
-    box-sizing: border-box; /* Include padding in height calculation */
 
 }
 
