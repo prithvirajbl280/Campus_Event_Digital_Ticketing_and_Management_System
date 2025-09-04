@@ -660,37 +660,43 @@ form[role="search"] button.btn {
 
 
 
-
 .registration-form {
-    width: 400px;
-    padding: 30px;
+    width: 320px;           /* Decreased width */
+    padding: 25px;
     margin: auto;
     position: relative;
-/*     top: 50%;
-    transform: translateY(-50%); */
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0,0,0,0.1);
     background-color: #fff;
-    text-align: center;  /* Center-align heading and contents */
-
+    text-align: center;  /* Keep heading & link centered */
 }
 
-/* Form fields styling - keep inputs centered and block */
+/* Form fields styling - left-aligned, full width with margin */
 .registration-form .form-input,
 .registration-form .form-select {
     display: block;
-    margin: 10px auto;
-    width: 90%;
+    margin: 10px 0;       /* Remove auto margins for left alignment */
+    width: 100%;          /* Full width inside container */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    text-align: left;     /* Align text inside inputs left */
+}
+
+/* Labels aligned left */
+.registration-form label {
+    display: block;
+    text-align: left;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-weight: bold;
 }
 
 /* Button Styling */
 .registration-form button {
     margin-top: 15px;
-    width: 95%;
+    width: 100%;          /* Full width for button */
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -698,7 +704,6 @@ form[role="search"] button.btn {
     border-radius: 5px;
     cursor: pointer;
 }
-
 .registration-form button:hover {
     background-color: #45a049;
 }
@@ -706,4 +711,5 @@ form[role="search"] button.btn {
 /* Link centered below the form */
 .registration-form p {
     margin-top: 15px;
+    text-align: center;   /* Keep link centered */
 }
