@@ -673,6 +673,10 @@ form[role="search"] button.btn {
     box-shadow: 0 0 12px rgba(0,0,0,0.1);
     background-color: #fff;
     text-align: center;  /* Center-align heading and contents */
+    max-height: 90vh;      /* Limit max height to 90% viewport height */
+    overflow-y: auto;      /* Enable vertical scrollbar when content overflows */
+    box-sizing: border-box; /* Include padding in height calculation */
+
 }
 
 /* Form fields styling - keep inputs centered and block */
