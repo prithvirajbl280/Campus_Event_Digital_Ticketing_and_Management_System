@@ -120,9 +120,10 @@ def admin_dashboard(request):
     if not request.user.is_superuser:
         return redirect('no_permission')
     
-    total_tickets = TicketConfirmation.objects.count()
+    total_tickets = TicketConfirmation.objects.filter(pushback=0).count()
     tickets_per_organiser = (
         TicketConfirmation.objects
+        .filter(pushback=0)
         .values('confirmed_by__username')
         .annotate(count=Count('id'))
         .order_by('-count')
@@ -214,7 +215,7 @@ def confirmed_tickets_list(request):
         return redirect('no_permission')
     
     query = request.GET.get('q', '')
-    tickets = TicketConfirmation.objects.select_related('student', 'confirmed_by')
+    tickets = TicketConfirmation.objects.select_related('student', 'confirmed_by').filter(pushback=0)
     
     if query:
         tickets = tickets.filter(
