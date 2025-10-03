@@ -9,7 +9,7 @@ This comprehensive digital ticketing and management system thus revolutionized t
 Website Usage Guidelines
 To use the system effectively, follow these steps:
 
-1. Register on the Student Register page after opening the provided link.
+1. Register on the Student Register page after opening the provided link. https://web-production-f81e.up.railway.app/
 2. Navigate to the Login Page: https://web-production-f81e.up.railway.app/accounts/login/
 3. Log in with Organizer credentials:
    - Username: test_organiser
