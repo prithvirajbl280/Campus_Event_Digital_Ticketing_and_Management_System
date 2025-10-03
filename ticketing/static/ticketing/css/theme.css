@@ -1,0 +1,507 @@
+/* Confirmed Tickets Table Styles */
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+}
+.custom-table th, .custom-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 1rem;
+  color: var(--foreground);
+  background: transparent;
+}
+.custom-table th {
+  font-weight: 700;
+  background: rgba(240,240,255,0.25);
+  border-bottom: 2px solid #e0e7ef;
+}
+.custom-table tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+.custom-table tbody tr:last-child {
+  border-bottom: none;
+}
+.custom-table td {
+  vertical-align: middle;
+}
+.custom-table .text-center {
+  text-align: center;
+}
+/* 
+  UI/UX Design and Theming for smpticketing
+  Based on the provided guidelines.
+*/
+
+/* 1. Color Palette as CSS Variables */
+
+:root {
+  --border: rgba(0,0,0,0.08);
+  --input: #f5f6fa;
+  --ring: #e0e7ef;
+  --background: #f7f7fa;
+  --foreground: #23272f;
+  --primary-base: #ff914d;
+  --primary-foreground: #23272f;
+  --secondary-base: #23272f;
+  --secondary-foreground: #fff;
+  --destructive-base: #e74c3c;
+  --destructive-foreground: #fff;
+  --muted-base: #f5f6fa;
+  --muted-foreground: #7a7a7a;
+  --accent-base: #f5f6fa;
+  --accent-foreground: #23272f;
+  --card-base: rgba(255,255,255,0.85);
+  --card-foreground: #23272f;
+  --border-radius: 1rem;
+  --shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+}
+
+/* 2. Typography and Body Styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Geist', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600; /* semibold */
+  color: var(--foreground);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+p { font-weight: 400; /* normal */ }
+
+/* 3. Layout and Spacing */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+.card {
+  padding: 3.5rem 2.5rem 3rem 2.5rem;
+  margin: 3rem auto 0 auto;
+  max-width: 650px;
+  width: 100%;
+  background: var(--card-base);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-bottom: 2.5rem;
+}
+
+/* Form Inputs */
+.form-group {
+  margin-bottom: 2.2rem;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  background: var(--card-base);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+select.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+
+/* --- Light / glassmorphism hero + card styles (inspired by attachment) --- */
+body {
+  /* soft pastel radial wash for background */
+  background-image: radial-gradient(circle at 10% 20%, rgba(255,235,230,0.08), transparent 15%),
+                    radial-gradient(circle at 90% 80%, rgba(230,240,255,0.06), transparent 20%);
+  background-color: #f7f5f3; /* subtle off-white base */
+}
+
+.hero {
+  text-align: center;
+  padding: 3.5rem 1rem 2.5rem;
+}
+.hero .hero-title {
+  font-size: 3.25rem;
+  line-height: 1;
+  margin: 0 0 0.5rem;
+  color: #f07f3f; /* warm accent similar to sample */
+  font-weight: 700;
+}
+.hero .hero-subtitle {
+  color: #6b6b6b;
+  max-width: 880px;
+  margin: 0 auto;
+  font-size: 1.125rem;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.75);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(20,20,20,0.07);
+  backdrop-filter: blur(8px) saturate(120%);
+}
+
+.glass-card h2 {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.form-control {
+  background-color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(20,20,20,0.06);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  color: #222;
+}
+.form-control::placeholder {
+  color: #9aa0a6;
+}
+
+.btn-primary {
+  background-color: #f07f3f; /* warm orange */
+  color: white;
+  border-color: transparent;
+}
+.btn-primary:hover { background-color: #e16f2e; }
+
+.btn-secondary {
+  background-color: rgba(0,0,0,0.06);
+  color: #222;
+  border-color: rgba(0,0,0,0.06);
+}
+
+/* make cards and hero responsive */
+@media (min-width: 768px) {
+  .hero .hero-title { font-size: 4rem; }
+  .container { max-width: 1000px; }
+}
+
+/* Modern Form Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Playfair+Display:wght@700&display=swap');
+
+.form-container {
+  max-width: 32rem;
+  margin: 3rem auto;
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+.form-container .form-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #FF9933;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.form-container .section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #FF9933;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.form-group label {
+  font-family: 'Inter', sans-serif;
+  color: #4B5563;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #FF9933;
+  box-shadow: 0 0 0 3px rgba(255,153,51,0.25);
+}
+.btn-submit {
+  background: #FF9933;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+  margin-top: 1rem;
+}
+.btn-submit:hover {
+  background: #E68A2E;
+}
+.btn-secondary-modern {
+  background: #E5E7EB;
+  color: #4B5563;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+  transition: background 0.2s;
+  display: inline-block;
+  margin-top: 1rem;
+}
+.btn-secondary-modern:hover {
+  background: #D1D5DB;
+}
+
+/* Make registration form wider on laptops/desktops */
+@media (min-width: 1024px) {
+  .registration-form {
+    max-width: 600px;
+    width: 80%;
+    padding: 40px;
+  }
+}
+
+/* Registration form container */
+.registration-form {
+    margin: 2em auto;
+    width: 90%; /* Increased from previous value */
+    max-width: 1400px; /* Increased from 1100px */
+    padding: 3em 4em;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95); /* Make form background slightly transparent */
+    backdrop-filter: blur(10px); /* Add blur effect to make text more readable */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Form input fields */
+.registration-form input[type="text"],
+.registration-form input[type="email"],
+.registration-form input[type="number"],
+.registration-form select {
+    width: 100%;
+    max-width: 800px; /* Wider inputs */
+    margin: 0.5em auto;
+    padding: 12px;
+}
+
+/* Form container/wrapper if you have one */
+.form-container {
+    width: 100%;
+    max-width: none;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .registration-form {
+        width: 95%;
+        padding: 2em 1em;
+    }
+}
+
+/* Indian Flag Gradient Background */
+.gradient-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    animation: flagColors 20s ease-in-out infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes flagColors {
+    0% {
+        background: linear-gradient(135deg, 
+            rgba(255, 153, 51, 0.15) 0%, /* Increased opacity to 15% for saffron */
+            rgba(255, 255, 255, 0.15) 50%, /* Increased opacity to 15% for white */
+            rgba(19, 136, 8, 0.15) 100%); /* Increased opacity to 15% for green */
+    }
+    50% {
+        background: linear-gradient(135deg, 
+            rgba(255, 153, 51, 0.15) 30%,
+            rgba(255, 255, 255, 0.15) 60%,
+            rgba(19, 136, 8, 0.15) 90%);
+    }
+    100% {
+        background: linear-gradient(135deg, 
+            rgba(255, 153, 51, 0.15) 0%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(19, 136, 8, 0.15) 100%);
+    }
+}
+
+/* Search Results Table Styling */
+.reg-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg-table th {
+    background: #f5f5f5;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.reg-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.reg-table tr:last-child td {
+    border-bottom: none;
+}
+
+.reg-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* View Details Button Styling */
+.view-details-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+/* Destructive/Danger Button Style */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+/* Download buttons styling */
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.download-pdf {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.download-pdf:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.download-qr {
+    background-color: #28a745;
+    color: white;
+    border: 1px solid #28a745;
+}
+
+.download-qr:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.total-tickets-box {
+    background: white;
+    min-width: 300px;
+    border: 1px solid #e0e0e0;
+}
+
+.total-tickets-box h4 {
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.total-tickets-box .total-count {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.total-tickets-box .btn {
+    padding: 8px 24px;
+    font-weight: 500;
+}
