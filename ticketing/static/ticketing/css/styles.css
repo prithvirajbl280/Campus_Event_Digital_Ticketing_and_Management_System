@@ -1,9 +1,8 @@
-body {
-    margin: 0;
-    background-color: #fefefe;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-}
+/* styles.css now delegates to theme.css to ensure legacy references pick up the new theme */
+@import url('theme.css');
+
+/* Legacy overrides (kept minimal) */
+body { min-height: 100vh; }
 /* Equivalent to .container in Bootstrap */
 .container {
     width: 100%;
@@ -420,7 +419,7 @@ button.btn-primary:hover {
   margin-bottom: 30px;
 }
 
-.cash-collected-link a:hover, {
+.cash-collected-link a:hover {
   background-color: #0d6efd;
   color: white;
   text-decoration: none;
@@ -660,8 +659,8 @@ form[role="search"] button.btn {
 
 
 
-.registration-form {
-    width: 320px;           /* Decreased width */
+/* .registration-form {
+    width: 320px;           /* Decreased width 
     padding: 25px;
     margin: auto;
     position: relative;
@@ -669,7 +668,26 @@ form[role="search"] button.btn {
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0,0,0,0.1);
     background-color: #fff;
-    text-align: center;  /* Keep heading & link centered */
+    text-align: center;  /* Keep heading & link centered 
+} */
+
+.registration-form {
+  margin: 2em auto;
+  width: 100%;
+  max-width: 1100px; /* spans most of the screen on laptops */
+  padding: 2em 3em;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .registration-form {
+    padding: 1em;
+    max-width: 98vw;
+  }
 }
 
 /* Form fields styling - left-aligned, full width with margin */
