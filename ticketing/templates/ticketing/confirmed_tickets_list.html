@@ -1,61 +1,60 @@
 {% extends 'ticketing/base.html' %}
 {% block content %}
-<h2>Confirmed Tickets</h2>
+<div class="card">
+  <div class="d-flex justify-between align-center mb-4">
+    <h2 class="mb-0">Confirmed Tickets</h2>
+    <button id="downloadPdfBtn" class="btn btn-danger btn-sm"><i class="fas fa-file-pdf"></i> Download PDF</button>
+  </div>
 
-<form method="get" class="d-flex mb-3" role="search">
-  <input 
-    type="text" 
-    name="q" 
-    placeholder="Search by name, SRN, PRN or organiser" 
-    value="{{ query }}" 
-    class="form-control me-2 w-5"
-    aria-label="Search"
-  >
-  <button type="submit" class="btn btn-primary">Search</button>
-</form>
+  <form method="get" class="d-flex mb-4" role="search">
+    <input type="text" name="q" placeholder="Search by name, SRN, PRN or organiser" value="{{ query }}"
+      class="form-control me-2" aria-label="Search">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
 
- <button id="downloadPdfBtn" class="btn btn-danger btn-sm download-btn">Download PDF</button>
-
-<table class="table table-striped table-bordered table-hover confirmed-tickets-table">
-  <thead class="table-primary">
-    <tr>
-      <th>Student Name</th>
-      <th>SRN</th>
-      <th>PRN</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Confirmed By</th>
-      <th>Confirmed At</th>
-      <th>Payment Type</th>
-      <th>UTR Number</th>
-      <th>Hostelite</th>
-      <th>Hostel Block/Unit</th>
-      <th>Room Number</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {% for ticket in tickets %}
-    <tr>
-      <td>{{ ticket.student.name }}</td>
-      <td>{{ ticket.student.srn }}</td>
-      <td>{{ ticket.student.prn }}</td>
-      <td>{{ ticket.student.email }}</td>
-      <td>{{ ticket.student.phone }}</td>
-      <td>{{ ticket.confirmed_by.username }}</td>
-      <td>{{ ticket.confirmed_at|date:"Y-m-d H:i" }}</td>
-      <td>{{ ticket.payment_type }}</td>
-      <td>{{ ticket.utr_number }}</td>
-      <td>{{ ticket.student.hostelite }}</td>
-      <td>{{ ticket.student.hostel_block }}</td>
-      <td>{{ ticket.student.room_number }}</td>
-
-    </tr>
-    {% empty %}
-    <tr><td colspan="9" class="text-center">No confirmed tickets found.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover confirmed-tickets-table">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>SRN</th>
+          <th>PRN</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Confirmed By</th>
+          <th>Confirmed At</th>
+          <th>Payment Type</th>
+          <th>UTR Number</th>
+          <th>Hostelite</th>
+          <th>Hostel Block/Unit</th>
+          <th>Room Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ticket in tickets %}
+        <tr>
+          <td>{{ ticket.student.name }}</td>
+          <td>{{ ticket.student.srn }}</td>
+          <td>{{ ticket.student.prn }}</td>
+          <td>{{ ticket.student.email }}</td>
+          <td>{{ ticket.student.phone }}</td>
+          <td>{{ ticket.confirmed_by.username }}</td>
+          <td>{{ ticket.confirmed_at|date:"Y-m-d H:i" }}</td>
+          <td>{{ ticket.payment_type }}</td>
+          <td>{{ ticket.utr_number }}</td>
+          <td>{{ ticket.student.hostelite }}</td>
+          <td>{{ ticket.student.hostel_block }}</td>
+          <td>{{ ticket.student.room_number }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="12" class="text-center">No confirmed tickets found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
