@@ -1,12 +1,12 @@
 {% extends 'ticketing/base.html' %}
 {% block content %}
 <div class="registration-form">
-  <h2>Student Registration</h2>
+  <h2 class="text-center mb-4">Student Registration</h2>
   <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Register</button>
+    <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
   </form>
-  <p>
+  <p class="text-center mt-3">
     <a href="{% url 'login' %}">Organiser Login</a>
   </p>
 </div>
