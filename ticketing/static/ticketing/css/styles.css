@@ -1,733 +1,299 @@
-/* styles.css now delegates to theme.css to ensure legacy references pick up the new theme */
-@import url('theme.css');
+/* Modern Design System for Samarpana Ticketing */
 
-/* Legacy overrides (kept minimal) */
-body { min-height: 100vh; }
-/* Equivalent to .container in Bootstrap */
+:root {
+    /* Color Palette */
+    --primary: #4F46E5; /* Indigo 600 */
+    --primary-hover: #4338CA; /* Indigo 700 */
+    --secondary: #64748B; /* Slate 500 */
+    --success: #10B981; /* Emerald 500 */
+    --danger: #EF4444; /* Red 500 */
+    --warning: #F59E0B; /* Amber 500 */
+    --info: #3B82F6; /* Blue 500 */
+    
+    /* Backgrounds */
+    --bg-body: #F8FAFC; /* Slate 50 */
+    --bg-card: #FFFFFF;
+    --bg-glass: rgba(255, 255, 255, 0.8);
+    
+    /* Text */
+    --text-main: #1E293B; /* Slate 800 */
+    --text-muted: #64748B; /* Slate 500 */
+    --text-light: #FFFFFF;
+    
+    /* Borders & Shadows */
+    --border-color: #E2E8F0; /* Slate 200 */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Typography */
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+}
+
+/* Global Reset & Base Styles */
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* Layout Utilities */
 .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
     width: 100%;
-    padding-right: 12px;
-    padding-left: 12px;
-    margin-right: auto;
-    margin-left: auto;
-    /* Responsive max-widths (optional if using Bootstrap) */
-    max-width: 100%;
 }
-
-/* Equivalent to .mt-4 in Bootstrap */
-.mt-4 {
-    margin-top: 1.5rem !important;  /* 24px */
-}
-
 
 .center-parent {
     display: flex;
-    flex-direction: column;      /* stack children vertically */
-    align-items: center;         /* horizontal center for all children */
-    margin-top: 100px;           /* top margin for the whole block */
-    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 2rem;
+}
+
+/* Cards & Containers */
+.card, .center-box, .registration-form, .dashboard-container, .glass-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    width: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .center-box {
-    background: white;
-    padding: 32px 32px 24px 32px;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-    min-width: 320px;
-    max-width: 360px;
-    width: 100%;
-    margin-top: 16px;            /* space between heading and box */
+    max-width: 400px;
 }
 
+.registration-form {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+/* Forms */
 form {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
     width: 100%;
-    margin: 0;
 }
 
-/* Headings */
-h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-/* Labels styling inside form */
-form label {
-    margin-top: 14px;
-    margin-bottom: 4px;
-    font-weight: bold;
+label {
     display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
 }
 
-/* Inputs, textarea, select styling */
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="number"],
 textarea,
-select {
+select,
+.form-control {
     width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+    margin-bottom: 1rem;
 }
 
-/* Focus effect for inputs */
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
+input:focus,
 textarea:focus,
-select:focus {
-    border-color: #3498db;
+select:focus,
+.form-control:focus {
     outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-/* Buttons styling */
+/* Buttons */
 button,
+.btn,
 input[type="submit"],
-button.btn-primary {
-    width: 100%;
-    background-color: #3498db;
-    color: white;
-    padding: 12px 0;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
+.qr-scanner-button,
+.view-details-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-family: var(--font-sans);
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+    font-size: 1rem;
+    gap: 0.5rem;
 }
 
-button:hover,
-input[type="submit"]:hover,
-button.btn-primary:hover {
-    background-color: #2980b9;
+.btn-primary, button[type="submit"], .qr-scanner-button {
+    background-color: var(--primary);
+    color: white;
 }
 
-/* Dashboard container styling */
-.dashboard-container {
-    max-width: 600px;
-    margin: 0 auto;
+.btn-primary:hover, button[type="submit"]:hover, .qr-scanner-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-danger, .btn-logout {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover, .btn-logout:hover {
+    background-color: #DC2626; /* Red 600 */
+}
+
+.btn-secondary {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-color);
+}
+
+/* Tables */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: #F1F5F9; /* Slate 100 */
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+tr:hover {
+    background-color: #F8FAFC;
+}
+
+/* Dashboard Specifics */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
     text-align: center;
-    padding: 24px;
 }
 
-/* Dashboard title */
-.dashboard-title {
-    margin-bottom: 16px;
+.stat-card h3 {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .value {
+    font-size: 2rem;
     font-weight: 700;
-    font-size: 28px;
-    color: #2c3e50;
+    color: var(--primary);
 }
 
-/* Dashboard info paragraph */
-.dashboard-info {
-    margin-bottom: 24px;
-    font-size: 18px;
-    color: #444;
+/* Scanner UI */
+.qr-scanner {
+    max-width: 500px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.qr-scanner__reader {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 1.5rem;
+    background: black;
+}
+
+.qr-scanner__ticket-info {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-top: 1rem;
     font-weight: 500;
 }
 
-/* Search button inside dashboard */
-.dashboard-container > a.btn-primary {
-    max-width: 400px;  /* Adjust width as needed */
-    width: 100%;       /* Responsive on smaller screens */
-    display: inline-block;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 16px;
-    margin-right: 16px;  /* For gap when next to logout */
-}
+/* Utilities */
+.text-center { text-align: center; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.d-flex { display: flex; }
+.gap-2 { gap: 0.5rem; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
 
-/* Logout form inline styles */
-.logout-form {
-    display: inline-block;
-    margin-top: 16px;
-}
-
-/* Logout button styling */
-.btn-logout {
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 40px;
-}
-
-.btn-logout:hover {
-    background-color: #c0392b;
-}
-
-/* Align search button and logout form side by side on wider screens */
-@media (min-width: 480px) {
-    .dashboard-container > a.btn-primary,
-    .logout-form {
-        display: inline-block;
-        vertical-align: middle;
-        margin-top: 0;  /* Remove top margin on wider screens */
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
     }
-}
-
-.search-form {
-    display: flex;
-    max-width: 800px;
-    margin: 0px auto;
-    padding-left: 100px;
-    gap: 16px; /* This adds space between the input and button */
-    align-items: center; /* Ensure vertical alignment */
-}
-
-.search-bar {
-     /* flex: 1;  Makes the input take all remaining space */
-    padding: 10px 12px;
-    margin-top: 20px;
-    max-width: 400px ;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    min-width: 0;
-}
-
-.search-btn {
-    padding: 10px 12px;
-    max-width: 200px;
-    font-size: 16px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    white-space: nowrap;
-}
-
-.search-btn:hover {
-    background-color: #2980b9;
-}
-
-.reg-table {
-  width: 75%;
-  margin: 20px auto;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.reg-table td,
-.reg-table th{
-  border: 1px solid #ddd;
-  padding: 12px 20px;
-  text-align: center;
-}
-
-
-.reg-table thead {
-  background-color: #3498db;
-  color: #fff;
-}
-
-.reg-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.reg-table tbody tr:hover {
-  background-color: #ebf5fb;
-}
-
-.view-details-btn {
-  background: #1976d2;
-  margin-left: 5px;
-  color: #fff;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: background 0.2s;
-  font-size: 14px;
-}
-
-.view-details-btn:hover {
-  background: #125a9c;
-}
-
-
-.details-table {
-  margin: 0 auto 20px auto; /* centers and adds bottom gap */
-  border-collapse: collapse;
-  width: 60%;
-  max-width: 500px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  border: #333739;
-  font-family: Arial, sans-serif;
-}
-
-.details-table th,
-.details-table td {
-  padding: 12px 20px;
-  border-bottom: 1px solid #e1e1e1;
-  text-align: center;
-  background-color: #caeaff;
-}
-
-.details-table th {
-  background-color: #3498db;
-  width: 30%;
-  font-weight: 600;
-  color: #151515;
-}
-
-.details-table tr:last-child td {
-  border-bottom: none;
-}
-
-.confirmation-form-container {
-  width: 60%;
-  max-width: 500px;
-  margin: 20px auto 0 auto; /* top margin 20px, horizontal center */
-  background: white;
-  padding: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-}
-
-.confirmation-form {
-  font-family: Arial, sans-serif;
-}
-
-.confirmation-form button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 12px 0;
-  background-color: #3498db;
-  font-size: 16px;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.confirmation-form button:hover {
-  background-color: #2980b9;
-}
-
-.total-tickets-box > div:nth-child(1) {
-  width: 60%;      /* first column fixed width */
-  text-align: center;
-  padding-right: 10px;
-  border-right: 1px solid #ccc;  /* light gray vertical separator */
-}
-
-.total-tickets-box > div:nth-child(2) {
-  width: 20%;      /* second column */
-  font-weight: 600;
-  font-size: 1.2rem;
-  text-align: center;
-  border-right: 1px solid #ccc;  /* light gray vertical separator */
-}
-
-.total-tickets-box > div:nth-child(3) {
-  width: 10%;      /* third column */
-  text-align: center;
-  margin-left: 25px;
-  
-}
-
-.total-tickets-box {
-  
-  gap: 10px;
-  padding: 12px 24px;
-  border: 1px solid #292828;
-  border-radius: 6px;
-  min-width: 600px;
-  align-items: center;
-}
-
-.total-tickets-box .label {
-  font-weight: normal;
-  font-size: 1rem;
-}
-
-.total-tickets-box .count {
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.center-heading {
-  text-align: center;
-}
-
-
-.organiser-table {
-  max-width: 600px;
-  width: 100%;
-  border: #151515;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.organiser-table td {
-  text-align: center;      /* Horizontal center */
-  vertical-align: middle;  /* Vertical center */
-}
-
-.chart-wrapper {
-  max-width: 600px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  border: 2px solid #151515; /* solid border with your specified color */
-  padding: 10px;             /* optional padding inside the border */
-  border-radius: 8px;        /* optional rounded corners */
-  box-sizing: border-box;    /* ensures padding and border are inside the width */
-}
-
-
-.logout-btn-wrapper {
-  margin-top: 40px;
-  max-width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  display: block; /* Ensure the div behaves like a block container */
-}
-
-
-.cash-collected-link a {
-  display: inline-block;
-  padding: 6px 16px;
-  font-size: 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #0d6efd;   /* Bootstrap primary color */
-  color: #0d6efd;
-  text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin-bottom: 30px;
-}
-
-.cash-collected-link a:hover {
-  background-color: #0d6efd;
-  color: white;
-  text-decoration: none;
-}
-
-/* Center alignment & spacing */
-.cash-collected-link {
-  text-align: center;
-}
-
-
-.custom-table {
-  max-width: 900px;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
-  text-align: center;
-  border: #151515;
-}
-
-/* Optional: Center all table cell contents */
-.custom-table th,
-.custom-table td {
-  vertical-align: middle;
-}
-
-/* Optional: style the header */
-.custom-table thead tr {
-  background-color: #007bff; /* Bootstrap primary blue */
-  color: white;
-}
-
-/* Zebra striping */
-.custom-table tbody tr:nth-child(even) {
-  background-color: #c0c3ff;
-}
-
-/* Optional: Reduce padding in the table cells */
-table.table td, table.table th {
-  padding: 0.5rem 0.75rem;
-}
-
-/* Optional: Fix input width if needed */
-form.d-flex input.form-control {
-  max-width: 400px;
-}
-
-
-/* Make search input a bit wider if desired */
-form[role="search"] input.form-control {
-  max-width: 400px;
-  min-width: 200px;
-  border-radius: 0.25rem 0 0 0.25rem;
-}
-
-/* Remove radius on right side of input to align with button */
-form[role="search"] button.btn {
-  border-radius: 0 0.25rem 0.25rem 0;
-}
-
-/* Align button height with input */
-form[role="search"] button.btn {
-  height: 38px;
-}
-
-
-form[role="search"] input.form-control{
-  height: 40px;           /* same height for both */
-  font-size: 1rem;
-  border-radius: 8px;     /* rounded corners */
-  vertical-align: middle; /* align vertically */
-  margin-top: 9px;
-}
-
-form[role="search"] button.btn {
-  width: 100px; 
-  height: 40px;           /* same height for both */
-  font-size: 1rem;
-  border-radius: 8px;     /* rounded corners */
-  vertical-align: middle; /* align vertically */
-}
-
-.download-btn {
-  max-width: 200px;
-  height: 35px;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  position: absolute;
-  margin-top: 95px;
-  margin-right: 50px;
-}
-/* Red logout button is from Bootstrap's btn-danger */
-/* If you want custom styles, add here */
-
-
-/* .qr-scanner-button {
-  display: inline-block;
-  width: 500px; 
-  text-align: center;
-  padding: 10px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #28a745;  
-  border: none;
-  border-radius: 6px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-} */
-
-.qr-scanner-button {
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #28a745;  /* Green shade */
-  border: none;
-  border-radius: 6px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  max-width: 400px;  /* Adjust width as needed */
-  width: 100%;       /* Responsive on smaller screens */
-  display: inline-block;
-  text-align: center;
-  padding: 10px 0;
-  font-size: 16px;
-} 
-
-
-.qr-scanner-button:hover {
-  background-color: #1e7e34;  /* Darker green on hover */
-  color: #ffffff;
-  text-decoration: none;
-}
-
-
-
-
-
-.qr-scanner {
-  font-family: Arial, sans-serif;
-  margin: 40px auto;
-  padding: 20px;
-  max-width: 420px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-.qr-scanner__reader {
-  width: 90vw;               /* Use 90% of viewport width */
-  max-width: 300px;          /* Keep max width 400px */
-  margin: 20px auto;         /* Center horizontally & add vertical gap */
-  border: 3px solid #007bff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: block;            /* Ensure block-level for margin auto */
-  box-sizing: border-box;    /* Include border in width */
-}
-
-
-.qr-scanner__ticket-info {
-  margin-top: 20px;
-  padding: 15px;
-  font-size: 18px;
-  white-space: pre-line;
-  text-align: center;
-  color: #fff;
-  min-height: 60px;
-  width: 100%;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.qr-scanner__ticket-info--valid {
-  background-color: #007bff; /* Blue for valid tickets */
-}
-
-.qr-scanner__ticket-info--verified {
-  background-color: #dc3545; /* Red for already verified */
-}
-
-.qr-scanner__verify-btn {
-  display: none;
-  margin: 20px auto 0;
-  padding: 12px 30px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #28a745;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: center;
-  user-select: none;
-  max-width: 200px;
-}
-
-.qr-scanner__verify-btn:hover {
-  background-color: #1e7e34;
-}
-
-.qr-scanner__verify-btn:disabled {
-  background-color: #aaaaaa;
-  cursor: not-allowed;
-}
-
-#ok-btn {
-  display: block;
-  margin: 10px auto 0;
-  padding: 6px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #007bff; /* Bootstrap blue */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
-  width: max-content;
-  text-align: center;
-}
-
-#ok-btn:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
-
-
-
-/* .registration-form {
-    width: 320px;           /* Decreased width 
-    padding: 25px;
-    margin: auto;
-    position: relative;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.1);
-    background-color: #fff;
-    text-align: center;  /* Keep heading & link centered 
-} */
-
-.registration-form {
-  margin: 2em auto;
-  width: 100%;
-  max-width: 1100px; /* spans most of the screen on laptops */
-  padding: 2em 3em;
-  box-sizing: border-box;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  text-align: center;
-}
-
-@media (max-width: 767px) {
-  .registration-form {
-    padding: 1em;
-    max-width: 98vw;
-  }
-}
-
-/* Form fields styling - left-aligned, full width with margin */
-.registration-form .form-input,
-.registration-form .form-select {
-    display: block;
-    margin: 10px 0;       /* Remove auto margins for left alignment */
-    width: 100%;          /* Full width inside container */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: left;     /* Align text inside inputs left */
-}
-
-/* Labels aligned left */
-.registration-form label {
-    display: block;
-    text-align: left;
-    margin-top: 14px;
-    margin-bottom: 4px;
-    font-weight: bold;
-}
-
-/* Button Styling */
-.registration-form button {
-    margin-top: 15px;
-    width: 100%;          /* Full width for button */
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.registration-form button:hover {
-    background-color: #45a049;
-}
-
-/* Link centered below the form */
-.registration-form p {
-    margin-top: 15px;
-    text-align: center;   /* Keep link centered */
+    
+    .card, .registration-form {
+        padding: 1.5rem;
+    }
+    
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
 }
