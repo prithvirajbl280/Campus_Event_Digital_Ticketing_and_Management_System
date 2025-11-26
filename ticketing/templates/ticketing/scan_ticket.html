@@ -4,121 +4,109 @@
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
-<div class="qr-scanner">
+<div class="card qr-scanner">
+  <h2 class="mb-4">Scan Ticket</h2>
   <div id="qr-reader" class="qr-scanner__reader"></div>
   <div id="ticket-info" class="qr-scanner__ticket-info"></div>
-  <button id="verify-btn" class="qr-scanner__verify-btn">Verify Ticket</button>
+  <button id="verify-btn" class="btn btn-success mt-3" style="display: none;">Verify Ticket</button>
 </div>
 
 <script>
-const verifyBtn = document.getElementById('verify-btn');
-const ticketInfo = document.getElementById('ticket-info');
-let currentTicketId = null;
+  const verifyBtn = document.getElementById('verify-btn');
+  const ticketInfo = document.getElementById('ticket-info');
+  let currentTicketId = null;
 
-// Remove previously shown ticket info styles
-function clearTicketInfoStyles() {
-  ticketInfo.classList.remove('qr-scanner__ticket-info--valid', 'qr-scanner__ticket-info--verified');
-  ticketInfo.style.backgroundColor = ''; // Clear inline background color if any
-}
-
-function showAlreadyVerifiedMessage(message) {
-  clearTicketInfoStyles();
-  ticketInfo.classList.add('qr-scanner__ticket-info--verified');
-  ticketInfo.innerText = message;
-
-  // Create OK button if not present
-  if (!document.getElementById('ok-btn')) {
-    const okBtn = document.createElement('button');
-    okBtn.id = 'ok-btn';
-    okBtn.innerText = 'OK';
-    okBtn.style.marginTop = '10px';
-    okBtn.style.padding = '6px 16px';
-    okBtn.style.fontSize = '14px';
-    okBtn.style.fontWeight = '600';
-    okBtn.style.color = '#fff';
-    okBtn.style.backgroundColor = '#007bff';
-    okBtn.style.border = 'none';
-    okBtn.style.borderRadius = '5px';
-    okBtn.style.cursor = 'pointer';
-    okBtn.style.display = 'block';
-    okBtn.style.marginLeft = 'auto';
-    okBtn.style.marginRight = 'auto';
-    okBtn.style.userSelect = 'none';
-    okBtn.style.width = 'max-content';
-    okBtn.onclick = () => {
-      clearTicketInfoStyles(); // Clear background colors
-      ticketInfo.innerText = '';
-      okBtn.remove();
-    };
-    ticketInfo.appendChild(okBtn);
+  // Remove previously shown ticket info styles
+  function clearTicketInfoStyles() {
+    ticketInfo.classList.remove('qr-scanner__ticket-info--valid', 'qr-scanner__ticket-info--verified');
+    ticketInfo.style.backgroundColor = ''; // Clear inline background color if any
   }
-}
 
-function onScanSuccess(decodedText) {
-  fetch('{% url "validate_ticket" %}', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}'
-    },
-    body: JSON.stringify({ ticket_id: decodedText })
-  })
-  .then(res => res.json())
-  .then(data => {
+  function showAlreadyVerifiedMessage(message) {
     clearTicketInfoStyles();
-    const existingOkBtn = document.getElementById('ok-btn');
-    if (existingOkBtn) existingOkBtn.remove();
+    ticketInfo.classList.add('qr-scanner__ticket-info--verified');
+    ticketInfo.innerText = message;
 
-    if (data.show_verify) {
-      ticketInfo.classList.add('qr-scanner__ticket-info--valid');
-      ticketInfo.innerText = `Name: ${data.name}\nSRN: ${data.srn}`;
-      verifyBtn.style.display = 'inline-block';
-      currentTicketId = decodedText;
-    } else if (data.message === 'Ticket already verified.') {
-      verifyBtn.style.display = 'none';
-      currentTicketId = null;
-      showAlreadyVerifiedMessage(data.message);
-    } else {
-      ticketInfo.classList.add('qr-scanner__ticket-info--valid');
-      ticketInfo.innerText = data.message;
-      verifyBtn.style.display = 'none';
-      currentTicketId = null;
-    }
-  });
-}
-
-verifyBtn.onclick = function() {
-  fetch('{% url "verify_ticket" %}', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}'
-    },
-    body: JSON.stringify({ ticket_id: currentTicketId })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message);
-    clearTicketInfoStyles(); // Clear background colors
-    ticketInfo.innerText = data.message;
-    verifyBtn.style.display = 'none';
-
-    // Clear message after 5 seconds for successful verification
-    if (data.message === 'Ticket verified successfully.') {
-      setTimeout(() => {
+    // Create OK button if not present
+    if (!document.getElementById('ok-btn')) {
+      const okBtn = document.createElement('button');
+      okBtn.id = 'ok-btn';
+      okBtn.innerText = 'OK';
+      okBtn.className = 'btn btn-primary mt-3 d-block mx-auto';
+      okBtn.onclick = () => {
         clearTicketInfoStyles(); // Clear background colors
         ticketInfo.innerText = '';
-      }, 5000);
+        okBtn.remove();
+      };
+      ticketInfo.appendChild(okBtn);
     }
-  });
-};
+  }
 
-const html5QrCode = new Html5Qrcode("qr-reader");
-html5QrCode.start(
-  { facingMode: "environment" },
-  { fps: 10, qrbox: 250 },
-  onScanSuccess
-);
+  function onScanSuccess(decodedText) {
+    fetch('{% url "validate_ticket" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({ ticket_id: decodedText })
+    })
+      .then(res => res.json())
+      .then(data => {
+        clearTicketInfoStyles();
+        const existingOkBtn = document.getElementById('ok-btn');
+        if (existingOkBtn) existingOkBtn.remove();
+
+        if (data.show_verify) {
+          ticketInfo.classList.add('qr-scanner__ticket-info--valid');
+          ticketInfo.innerText = `Name: ${data.name}\nSRN: ${data.srn}`;
+          verifyBtn.style.display = 'inline-block';
+          currentTicketId = decodedText;
+        } else if (data.message === 'Ticket already verified.') {
+          verifyBtn.style.display = 'none';
+          currentTicketId = null;
+          showAlreadyVerifiedMessage(data.message);
+        } else {
+          ticketInfo.classList.add('qr-scanner__ticket-info--valid');
+          ticketInfo.innerText = data.message;
+          verifyBtn.style.display = 'none';
+          currentTicketId = null;
+        }
+      });
+  }
+
+  verifyBtn.onclick = function () {
+    fetch('{% url "verify_ticket" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({ ticket_id: currentTicketId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        clearTicketInfoStyles(); // Clear background colors
+        ticketInfo.innerText = data.message;
+        verifyBtn.style.display = 'none';
+
+        // Clear message after 5 seconds for successful verification
+        if (data.message === 'Ticket verified successfully.') {
+          setTimeout(() => {
+            clearTicketInfoStyles(); // Clear background colors
+            ticketInfo.innerText = '';
+          }, 5000);
+        }
+      });
+  };
+
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    onScanSuccess
+  );
 </script>
 
 {% endblock %}
