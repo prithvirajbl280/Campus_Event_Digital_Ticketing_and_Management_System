@@ -1,22 +1,31 @@
 {% extends 'ticketing/base.html' %}
 
 {% block content %}
-<div class="dashboard-container">
-  <h2 class="dashboard-title">Welcome, {{ request.user.username }}!</h2>
-
-  <p class="dashboard-info">
-     You have confirmed {{ confirmed_count }} tickets so far.
-  </p>
-
-  <a href="{% url 'organiser_search' %}" class="btn btn-primary">Search Registrations</a>
-
-<a href="{% url 'ticket_scanner' %}" class="qr-scanner-button" style="margin-top: 20px;">
-  Open QR Scanner
-</a>
-
-  <form method="post" action="{% url 'logout' %}" class="logout-form">
+<div class="d-flex justify-between align-center mb-4">
+  <h2 class="mb-0">Organiser Dashboard</h2>
+  <form method="post" action="{% url 'logout' %}" class="d-flex">
     {% csrf_token %}
-    <button type="submit" class="btn btn-logout">Logout</button>
+    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </form>
+</div>
+
+<div class="card mb-4">
+  <div class="text-center py-4">
+    <h3 class="mb-2">Welcome, {{ request.user.username }}!</h3>
+    <p class="text-muted">You have confirmed <strong>{{ confirmed_count }}</strong> tickets so far.</p>
+  </div>
+</div>
+
+<div class="dashboard-stats">
+  <div class="stat-card">
+    <h3>Search</h3>
+    <div class="value"><i class="fas fa-search"></i></div>
+    <a href="{% url 'organiser_search' %}" class="btn btn-primary btn-sm mt-2">Search Registrations</a>
+  </div>
+  <div class="stat-card">
+    <h3>Scan Ticket</h3>
+    <div class="value"><i class="fas fa-qrcode"></i></div>
+    <a href="{% url 'ticket_scanner' %}" class="btn btn-success btn-sm mt-2">Open Scanner</a>
+  </div>
 </div>
 {% endblock %}
