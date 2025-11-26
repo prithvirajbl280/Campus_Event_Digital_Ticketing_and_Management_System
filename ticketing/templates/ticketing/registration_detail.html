@@ -1,89 +1,92 @@
 {% extends 'ticketing/base.html' %}
 
 {% block content %}
-<h2 style="text-align: center;">Student Details</h2>
-
-<table class="details-table">
-  <tbody>
-    <tr>
-      <th>Name:</th>
-      <td>{{ registration.name }}</td>
-    </tr>
-    <tr>
-      <th>SRN:</th>
-      <td>{{ registration.srn }}</td>
-    </tr>
-    <tr>
-      <th>PRN:</th>
-      <td>{{ registration.prn }}</td>
-    </tr>
-<!--     <tr>
-      <th>Email:</th>
-      <td>{{ registration.email }}</td>
-    </tr>
-    <tr>
-      <th>Phone:</th>
-      <td>{{ registration.phone }}</td>
-    </tr> -->
-    <tr>
-      <th>Year:</th>
-      <td>{{ registration.year }}</td>
-    </tr>
-    <tr>
-      <th>Hostelite:</th>
-      <td>{{ registration.hostelite }}</td>
-    </tr>
-    <tr>
-      <th>Hostel Block/Unit:</th>
-      <td>{{ registration.hostel_block }}</td>
-    </tr>
-    <tr>
-      <th>Room Number:</th>
-      <td>{{ registration.room_number }}</td>
-    </tr>
-
-  </tbody>
-</table>
-
-<div class="ticket-price" style="text-align: center; margin: 20px 0;">
-    <h2 style="color: rgb(255, 0, 0); font-weight: bold; ">Ticket Price: ₹ {{ ticket_price }}</h2>
-</div>
-
-<div class="confirmation-form-container">
-  <h3 style="text-align: center;">Ticket Confirmation</h3>
-  <form method="post" class="confirmation-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    {% if form.errors %}
-      <div style="color: red;">
-        {{ form.non_field_errors }}
-        {% for field in form %}
-          {% for error in field.errors %}
-            <p>{{ field.label }}: {{ error }}</p>
-          {% endfor %}
-        {% endfor %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <h2 class="text-center mb-4">Student Details</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th class="w-25 bg-light">Name:</th>
+              <td>{{ registration.name }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">SRN:</th>
+              <td>{{ registration.srn }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">PRN:</th>
+              <td>{{ registration.prn }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">Year:</th>
+              <td>{{ registration.year }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">Hostelite:</th>
+              <td>{{ registration.hostelite }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">Hostel Block/Unit:</th>
+              <td>{{ registration.hostel_block }}</td>
+            </tr>
+            <tr>
+              <th class="bg-light">Room Number:</th>
+              <td>{{ registration.room_number }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    {% endif %}
 
-    <script>
-      function toggleUtrField() {
-        const paymentType = document.getElementById("id_payment_type").value;
-        const utrField = document.getElementById("div_id_utr_number");
-        if (paymentType === "UPI") {
-          utrField.style.display = "block";
-        } else {
-          utrField.style.display = "none";
-          document.getElementById("id_utr_number").value = "";
-        }
-      }
-      document.addEventListener("DOMContentLoaded", function() {
-        toggleUtrField();
-        document.getElementById("id_payment_type").addEventListener("change", toggleUtrField);
-      });
-    </script>
+      <div class="text-center my-4">
+        <h2 class="text-danger fw-bold">Ticket Price: ₹ {{ ticket_price }}</h2>
+      </div>
+    </div>
 
-    <button type="submit">Confirm</button>
-  </form>
+    <div class="card">
+      <h3 class="text-center mb-4">Ticket Confirmation</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+          {{ form.non_field_errors }}
+          {% for field in form %}
+          {% for error in field.errors %}
+          <p class="mb-0">{{ field.label }}: {{ error }}</p>
+          {% endfor %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Confirm</button>
+      </form>
+    </div>
+  </div>
 </div>
+
+<script>
+  function toggleUtrField() {
+    const paymentType = document.getElementById("id_payment_type");
+    const utrField = document.getElementById("id_utr_number").closest('p'); // Assuming form.as_p wraps in p
+    if (paymentType && utrField) {
+      if (paymentType.value === "UPI") {
+        utrField.style.display = "block";
+      } else {
+        utrField.style.display = "none";
+        document.getElementById("id_utr_number").value = "";
+      }
+    }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    const paymentType = document.getElementById("id_payment_type");
+    if (paymentType) {
+      toggleUtrField();
+      paymentType.addEventListener("change", toggleUtrField);
+    }
+  });
+</script>
 {% endblock %}
